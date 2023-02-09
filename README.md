@@ -57,6 +57,6 @@ foreach ($tables as $table) {
 * _getGroupsList()_ - получить список групп пользователей
 * _getGroup(int $groupId)_ - получить информацию о группе пользователей
 
-#### Запрос к API
+#### Произвольный запрос к API
 
 * _query(string $path, string $method="GET", array $urlQuery = [], $body = null)_ -   произвольный запрос к API

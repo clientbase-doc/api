@@ -1,16 +1,34 @@
 <?php
 
-//namespace clientbase\api;
-
 class ClientbaseAPI
 {
-
     private $apiURL;
     private $token;
 
-    public function __construct($clientbaseURL, $token)
+    public function __construct(string $clientbaseURL, string $token)
     {
-        $this->apiURL = $clientbaseURL . "/api/dev";
+        if (!$clientbaseURL || !$token) {
+            throw new HttpException('Clientbase URL or token is empty', 404);
+        }
+
+        if (substr($clientbaseURL, -1) !== '/') $clientbaseURL .= '/';
+        if (substr($clientbaseURL, 0, 4) !== 'http') {
+            switch (substr($clientbaseURL, 0, 2)) {
+                case ':/':
+                    $clientbaseURL = 'http' . $clientbaseURL;
+                    break;
+
+                case '//':
+                    $clientbaseURL = 'http:' . $clientbaseURL;
+                    break;
+
+                default:
+                    $clientbaseURL = 'http://' . $clientbaseURL;
+                    break;
+            }
+        }        
+
+        $this->apiURL = $clientbaseURL . "api/dev";
         $this->token = $token;
     }    
     
@@ -34,8 +52,12 @@ class ClientbaseAPI
      * @param $includeFields bool Получить информацию о полях таблицы
      * @return stdClass
      */    
-    public function getTable(int $tableId, bool $includeFields = false): stdClass 
+    public function getTable(int $tableId, bool $includeFields = false) : stdClass 
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+        }
+
         $queryParams = $includeFields ? ['include' => 'fields'] : [];
         $rawResult = $this->query("/table/" . $tableId, "GET", $queryParams);
         $result = $this->_rawToResult($rawResult);
@@ -53,8 +75,20 @@ class ClientbaseAPI
      * @param $filter mixed Фильтр в виде строки или массива 
      * @return array
      */    
-    public function getDataList(int $tableId, int $offset=0, int $limit=0, $filter=''): array 
+    public function getDataList(int $tableId, int $offset=0, int $limit=0, $filter='') : array 
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+        }
+
+        if ($offset < 0) {
+            throw new HttpException('Incorrect offset: ' . $offset, 404);
+        }
+
+        if ($limit < 0) {
+            throw new HttpException('Incorrect limit: ' . $limit, 404);
+        }
+
         $queryParams = ['page' => []];
         if ($offset) {
             $queryParams['page']['offset'] = $offset;
@@ -79,8 +113,16 @@ class ClientbaseAPI
      * @param $lineId int id записи в таблице
      * @return stdClass
      */
-    public function getData($tableId, $lineId) 
+    public function getData(int $tableId, int $lineId) : stdClass 
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+        }
+        
+        if ($lineId <= 0) {
+            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+        }
+
         $rawResult = $this->query("/data" . $tableId . "/" . $lineId);
         $result = $this->_rawToResult($rawResult);
 
@@ -94,8 +136,16 @@ class ClientbaseAPI
      * @param $lineId int id записи в таблице
      *
      */
-    public function deleteData($tableId, $lineId) 
+    public function deleteData(int $tableId, int $lineId) 
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+        }
+        
+        if ($lineId <= 0) {
+            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+        }
+
         $this->query("/data" . $tableId . "/" . $lineId, "DELETE");
     }
 
@@ -105,7 +155,7 @@ class ClientbaseAPI
      * @param $data array Массив с данными для добавления/обновления записи в таблице
      * @return stdClass
      */
-    public function bodyFromData($data) 
+    public function bodyFromData(array $data) : stdClass 
     {
         $body = new stdClass();
         $body->data = new stdClass();
@@ -121,8 +171,12 @@ class ClientbaseAPI
      * @param $data array Данные для добавления 
      * @return stdClass
      */
-    public function addData($tableId, $data)
+    public function addData(int $tableId, array $data) : stdClass
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+        }
+                
         $body = $this->bodyFromData($data);
         $body->data->type = "data" . $tableId;   
         $rawResult = $this->query("/data" . $tableId . "/" . $lineId, "POST", "", $body);
@@ -139,8 +193,16 @@ class ClientbaseAPI
      * @param $data array Данные для обновления 
      * @return stdClass
      */
-    public function updateData($tableId, $lineId, $data) 
+    public function updateData(int $tableId, int $lineId, array $data) : stdClass 
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+        }
+        
+        if ($lineId <= 0) {
+            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+        }
+
         $body = $this->bodyFromData($data);
         $body->data->type = "data" . $tableId;
         $body->data->id = $lineId;        
@@ -155,7 +217,7 @@ class ClientbaseAPI
      * 
      * @return array
      */
-    public function getUsersList() 
+    public function getUsersList() : array
     {
         $rawResult = $this->query("/user");
         $result = $this->_rawToResult($rawResult);
@@ -169,8 +231,12 @@ class ClientbaseAPI
      * @param $userId id пользователя
      * @return stdClass
      */
-    public function getUser($userId) 
+    public function getUser(int $userId) : stdClass 
     {
+        if ($userId <= 0) {
+            throw new HttpException('Incorrect user id: ' . $userId, 404);
+        }
+
         $rawResult = $this->query("/user/" . $userId);
         $result = $this->_rawToResult($rawResult);
 
@@ -182,7 +248,7 @@ class ClientbaseAPI
      * 
      * @return array
      */
-    public function getGroupsList() 
+    public function getGroupsList() : array
     {
         $rawResult = $this->query("/group");
         $result = $this->_rawToResult($rawResult);
@@ -196,8 +262,12 @@ class ClientbaseAPI
      * @param $groupId id группы пользователей
      * @return stdClass     
      */
-    public function getGroup($groupId) 
+    public function getGroup($groupId) : stdClass
     {
+        if ($groupId <= 0) {
+            throw new HttpException('Incorrect group id: ' . $groupId, 404);
+        }
+
         $rawResult = $this->query("/group/" . $groupId);
         $result = $this->_rawToResult($rawResult);
 
@@ -213,8 +283,20 @@ class ClientbaseAPI
      * @param $fileName string Название файла
      * @return stdClass
      */
-    public function getFile($tableId, $fieldId, $lineId, $fileName) 
+    public function getFile(int $tableId, int $fieldId, int $lineId, string $fileName) : stdClass
     {
+        if ($tableId <= 0) {
+            throw new HttpException('Incorrect table id:' . $tableId, 404);
+        }
+        
+        if ($lineId <= 0) {
+            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+        }
+
+        if ($fieldId <= 0) {
+            throw new HttpException('Incorrect field id: ' . $fieldId, 404);
+        }
+                
         $rawResult = $this->query("/file/" . $tableId . "/" . $fieldId . "/" . $lineId . "/" . $fileName);
         $result = $this->_rawToResult($rawResult);
 
@@ -230,8 +312,15 @@ class ClientbaseAPI
      * @param $body stdObject данные для запросов POST, PATCH
      * @return stdClass
      */
-    public function query($path, $method="GET", $urlQuery = [], $body = null) 
+    public function query(string $path, string $method="GET", array $urlQuery = [], $body = null) : stdClass
     {
+        
+        $method = mb_strtoupper($method);
+        if (!in_array($method, ['GET', 'POST', 'PATCH', 'DELETE'])) {
+            throw new HttpException('Incorrect method: ' . $method, 404);
+
+        }
+
         $requestURL = $this->apiURL . $path;
         
         if ($urlQuery) {
@@ -239,11 +328,8 @@ class ClientbaseAPI
             $requestURL .= "?" . $urlQueryLine;
         }
 
-       //echo "<br/><br/>URL: [" . $method . "] " . $requestURL . "<br/><br/>";
-
         if ($body) {
             $body = json_encode($body);
-            //echo $body;
         }
 
         $out = $this->_sendRequest($requestURL, $method, $body);
