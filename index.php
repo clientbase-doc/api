@@ -10,7 +10,7 @@
  */
 
     //Подключаем класс для работы с API
-    require_once "../api/dev/ClientbaseAPI.php";
+    require_once "src/ClientbaseAPI.php";
 
     //Укажите URL вашей "Клиентской Базы"
     $url = 'http://localhost/distr';

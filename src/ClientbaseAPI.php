@@ -1,5 +1,7 @@
 <?php
 
+namespace clientbase\api;
+
 class ClientbaseAPI
 {
 
