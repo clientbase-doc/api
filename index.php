@@ -1,5 +1,6 @@
 <?php
 
+//use clientbase\api;
 /**
  * Пример работы с API CRM "Клиентская База"
  * 

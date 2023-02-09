@@ -1,6 +1,6 @@
 <?php
 
-namespace clientbase\api;
+//namespace clientbase\api;
 
 class ClientbaseAPI
 {
@@ -20,7 +20,7 @@ class ClientbaseAPI
      * 
      * @return array
      */        
-    public function getTablesList() 
+    public function getTablesList(): array
     {
         $rawResult = $this->query("/table");
         $result = $this->_rawToResult($rawResult);
@@ -32,9 +32,9 @@ class ClientbaseAPI
      * Получить информацию о таблице
      * @param $tableId int id таблицы
      * @param $includeFields bool Получить информацию о полях таблицы
-     * @return stdObject
+     * @return stdClass
      */    
-    public function getTable($tableId, $includeFields = false) 
+    public function getTable(int $tableId, bool $includeFields = false): stdClass 
     {
         $queryParams = $includeFields ? ['include' => 'fields'] : [];
         $rawResult = $this->query("/table/" . $tableId, "GET", $queryParams);
@@ -53,7 +53,7 @@ class ClientbaseAPI
      * @param $filter mixed Фильтр в виде строки или массива 
      * @return array
      */    
-    public function getDataList($tableId, $offset=0, $limit=0, $filter='') 
+    public function getDataList(int $tableId, int $offset=0, int $limit=0, $filter=''): array 
     {
         $queryParams = ['page' => []];
         if ($offset) {
@@ -77,7 +77,7 @@ class ClientbaseAPI
      * 
      * @param $tableId int id таблицы
      * @param $lineId int id записи в таблице
-     * @return stdObject
+     * @return stdClass
      */
     public function getData($tableId, $lineId) 
     {
@@ -103,7 +103,7 @@ class ClientbaseAPI
      * Перевести массив с данными в формат, подходящий для отправки на сервер
      * 
      * @param $data array Массив с данными для добавления/обновления записи в таблице
-     * @return stdObject
+     * @return stdClass
      */
     public function bodyFromData($data) 
     {
@@ -119,7 +119,7 @@ class ClientbaseAPI
      * 
      * @param $tableId int id таблицы
      * @param $data array Данные для добавления 
-     * @return stdObject
+     * @return stdClass
      */
     public function addData($tableId, $data)
     {
@@ -137,7 +137,7 @@ class ClientbaseAPI
      * @param $tableId int id таблицы
      * @param $lineId int id записи в таблице
      * @param $data array Данные для обновления 
-     * @return stdObject
+     * @return stdClass
      */
     public function updateData($tableId, $lineId, $data) 
     {
@@ -167,7 +167,7 @@ class ClientbaseAPI
      * Получить информацию о пользователе
      * 
      * @param $userId id пользователя
-     * @return stdObject
+     * @return stdClass
      */
     public function getUser($userId) 
     {
@@ -194,7 +194,7 @@ class ClientbaseAPI
      * Получить информацию о группе пользователей
      * 
      * @param $groupId id группы пользователей
-     * @return stdObject     
+     * @return stdClass     
      */
     public function getGroup($groupId) 
     {
@@ -211,7 +211,7 @@ class ClientbaseAPI
      * @param $fieldId id поля таблицы
      * @param $lineId id записи таблицы
      * @param $fileName string Название файла
-     * @return stdObject
+     * @return stdClass
      */
     public function getFile($tableId, $fieldId, $lineId, $fileName) 
     {
@@ -228,7 +228,7 @@ class ClientbaseAPI
      * @param $method string метод запроса
      * @param $urlQuery array GET-параметры запроса в виде массива
      * @param $body stdObject данные для запросов POST, PATCH
-     * @return stdObject
+     * @return stdClass
      */
     public function query($path, $method="GET", $urlQuery = [], $body = null) 
     {
