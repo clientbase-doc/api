@@ -33,30 +33,30 @@ foreach ($tables as $table) {
 
 #### Таблицы
 
-* **getTablesList()** - получить список пользовательских таблиц
-* **getTable(int $tableId, bool $includeFields=false)** - получить информацию о таблице, включая информацию о полях
+* _getTablesList()_ - получить список пользовательских таблиц
+* _getTable(int $tableId, bool $includeFields=false)_ - получить информацию о таблице, включая информацию о полях
 
 #### Данные в таблицах
 
-* **getDataList(int $tableId, int $offset=0, int $limit=0, mixed $filter='')** - получить список записей таблицы c ограничением количества и выборкой по фильтру
-* **getData(int $tableId, int $lineId)** - получить информацию о записи в таблице
-* **getData(int $tableId, int $lineId)** - получить информацию о записи в таблице
-* **getFile(int $tableId, int $fieldId, int $lineId, string $fileName)** - получить информацию файле из поля типа "Файл" в записи
+* _getDataList(int $tableId, int $offset=0, int $limit=0, mixed $filter='')_ - получить список записей таблицы c ограничением количества и выборкой по фильтру
+* _getData(int $tableId, int $lineId)_ - получить информацию о записи в таблице
+* _getData(int $tableId, int $lineId)_ - получить информацию о записи в таблице
+* _getFile(int $tableId, int $fieldId, int $lineId, string $fileName)_ - получить информацию файле из поля типа "Файл" в записи
 
-* **deleteData(int $tableId, int $lineId)** - удалить запись из таблицы
-* **addData(int $tableId, array $data)** - добавить запись в таблицу
-* **updateData(int $tableId, int $lineId, array $data)** - обновить запись в таблице
+* _deleteData(int $tableId, int $lineId)_ - удалить запись из таблицы
+* _addData(int $tableId, array $data)_ - добавить запись в таблицу
+* _updateData(int $tableId, int $lineId, array $data)_ - обновить запись в таблице
 
 #### Пользователи
 
-* **getUsersList()** - получить список пользователей
-* **getUser(int $userId)** - получить информацию о пользователе
+* _getUsersList()_ - получить список пользователей
+* _getUser(int $userId)_ - получить информацию о пользователе
 
 #### Группы пользователей
 
-* **getGroupsList()** - получить список групп пользователей
-* **getGroup(int $groupId)** - получить информацию о группе пользователей
+* _getGroupsList()_ - получить список групп пользователей
+* _getGroup(int $groupId)_ - получить информацию о группе пользователей
 
 #### Запрос к API
 
-* **query(string $path, string $method="GET", array $urlQuery = [], $body = null)** -   произвольный запрос к API
+* _query(string $path, string $method="GET", array $urlQuery = [], $body = null)_ -   произвольный запрос к API
