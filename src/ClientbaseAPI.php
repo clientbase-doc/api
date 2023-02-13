@@ -8,7 +8,7 @@ class ClientbaseAPI
     public function __construct(string $clientbaseURL, string $token)
     {
         if (!$clientbaseURL || !$token) {
-            throw new HttpException('Clientbase URL or token is empty', 404);
+            throw new Exception('Clientbase URL or token is empty');
         }
 
         if (substr($clientbaseURL, -1) !== '/') $clientbaseURL .= '/';
@@ -55,7 +55,7 @@ class ClientbaseAPI
     public function getTable(int $tableId, bool $includeFields = false) : stdClass 
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+            throw new Exception('Incorrect table id: ' . $tableId);
         }
 
         $queryParams = $includeFields ? ['include' => 'fields'] : [];
@@ -78,15 +78,15 @@ class ClientbaseAPI
     public function getDataList(int $tableId, int $offset=0, int $limit=0, $filter='') : array 
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+            throw new Exception('Incorrect table id: ' . $tableId);
         }
 
         if ($offset < 0) {
-            throw new HttpException('Incorrect offset: ' . $offset, 404);
+            throw new Exception('Incorrect offset: ' . $offset);
         }
 
         if ($limit < 0) {
-            throw new HttpException('Incorrect limit: ' . $limit, 404);
+            throw new Exception('Incorrect limit: ' . $limit);
         }
 
         $queryParams = ['page' => []];
@@ -116,11 +116,11 @@ class ClientbaseAPI
     public function getData(int $tableId, int $lineId) : stdClass 
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+            throw new Exception('Incorrect table id: ' . $tableId);
         }
         
         if ($lineId <= 0) {
-            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+            throw new Exception('Incorrect line id: ' . $lineId);
         }
 
         $rawResult = $this->query("/data" . $tableId . "/" . $lineId);
@@ -139,11 +139,11 @@ class ClientbaseAPI
     public function deleteData(int $tableId, int $lineId) 
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+            throw new Exception('Incorrect table id: ' . $tableId);
         }
         
         if ($lineId <= 0) {
-            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+            throw new Exception('Incorrect line id: ' . $lineId);
         }
 
         $this->query("/data" . $tableId . "/" . $lineId, "DELETE");
@@ -174,7 +174,7 @@ class ClientbaseAPI
     public function addData(int $tableId, array $data) : stdClass
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+            throw new Exception('Incorrect table id: ' . $tableId);
         }
                 
         $body = $this->bodyFromData($data);
@@ -196,11 +196,11 @@ class ClientbaseAPI
     public function updateData(int $tableId, int $lineId, array $data) : stdClass 
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id: ' . $tableId, 404);
+            throw new Exception('Incorrect table id: ' . $tableId);
         }
         
         if ($lineId <= 0) {
-            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+            throw new Exception('Incorrect line id: ' . $lineId);
         }
 
         $body = $this->bodyFromData($data);
@@ -234,7 +234,7 @@ class ClientbaseAPI
     public function getUser(int $userId) : stdClass 
     {
         if ($userId <= 0) {
-            throw new HttpException('Incorrect user id: ' . $userId, 404);
+            throw new Exception('Incorrect user id: ' . $userId);
         }
 
         $rawResult = $this->query("/user/" . $userId);
@@ -265,7 +265,7 @@ class ClientbaseAPI
     public function getGroup($groupId) : stdClass
     {
         if ($groupId <= 0) {
-            throw new HttpException('Incorrect group id: ' . $groupId, 404);
+            throw new Exception('Incorrect group id: ' . $groupId);
         }
 
         $rawResult = $this->query("/group/" . $groupId);
@@ -286,15 +286,15 @@ class ClientbaseAPI
     public function getFile(int $tableId, int $fieldId, int $lineId, string $fileName) : stdClass
     {
         if ($tableId <= 0) {
-            throw new HttpException('Incorrect table id:' . $tableId, 404);
+            throw new Exception('Incorrect table id:' . $tableId);
         }
         
         if ($lineId <= 0) {
-            throw new HttpException('Incorrect line id: ' . $lineId, 404);
+            throw new Exception('Incorrect line id: ' . $lineId);
         }
 
         if ($fieldId <= 0) {
-            throw new HttpException('Incorrect field id: ' . $fieldId, 404);
+            throw new Exception('Incorrect field id: ' . $fieldId);
         }
                 
         $rawResult = $this->query("/file/" . $tableId . "/" . $fieldId . "/" . $lineId . "/" . $fileName);
@@ -314,11 +314,12 @@ class ClientbaseAPI
      */
     public function query(string $path, string $method="GET", array $urlQuery = [], $body = null) : stdClass
     {
+
+        if (substr($path, 0, 1) !== '/') $path = '/' . $path;   
         
         $method = mb_strtoupper($method);
         if (!in_array($method, ['GET', 'POST', 'PATCH', 'DELETE'])) {
-            throw new HttpException('Incorrect method: ' . $method, 404);
-
+            throw new Exception('Incorrect method: ' . $method);
         }
 
         $requestURL = $this->apiURL . $path;
@@ -343,7 +344,7 @@ class ClientbaseAPI
      *
      * @param $rawResult stdObject Данные, полученные по API
      * @return mixed
-     * @throws HttpException
+     * @throws Exception
      */
     private function _rawToResult($rawResult) 
     {
@@ -380,7 +381,7 @@ class ClientbaseAPI
      *
      * @param $rawResult stdObject Данные, полученные по API
      * @return mixed
-     * @throws HttpException
+     * @throws Exception
      */    
     private function _simpleData($data) 
     {
@@ -400,7 +401,7 @@ class ClientbaseAPI
      * @param $method string метод запроса
      * @param $body mixed тело запроса
      * @return mixed
-     * @throws HttpException
+     * @throws Exception
      */
     private function _sendRequest($requestURL, $method="GET", $body=null)
     {
@@ -430,7 +431,7 @@ class ClientbaseAPI
             return $out;
 
         } else {
-            throw new HttpException('Can not create connection to ' . $requestURL, 404);
+            throw new Exception('Can not create connection to ' . $requestURL);
         }
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-//use clientbase\api;
 /**
  * Пример работы с API CRM "Клиентская База"
  * 
@@ -14,7 +13,7 @@
     require_once "src/ClientbaseAPI.php";
 
     //Укажите URL вашей "Клиентской Базы"
-    $url = 'http://localhost/distr';
+    $url = '';//'http://localhost/distr';
 
     //Укажите токен, который вы создали для работы с API в настройках "Клиентской Базы"
     $token = "P8O49OmRKgjh8EVmfCSkvKbBtyFiQpVnj0vDzNolr8xLbgdC";
