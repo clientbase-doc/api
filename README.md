@@ -2,7 +2,7 @@
 
 **ClientbaseAPI** - это PHP-класс, позволяющий работать с методами API 2.0 CRM "Клиентская база".
 
-[Документация по работе с API 2.0 на сайте clientbase.ru](https://clientbase.ru/help/for_admin_16/api_2.html){target="_blank"} 
+<a href="https://clientbase.ru/help/for_admin_16/api_2.html" target="_blank">Документация по работе с API 2.0 на сайте clientbase.ru</a> 
 
 ### Начало работы 
 
