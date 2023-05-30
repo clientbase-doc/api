@@ -41,7 +41,7 @@ foreach ($tables as $table) {
 
 Возвращаемое значение: массив, состоящий из объектов stdObject, содержащих информацию о таблице.
 
-### getTable(int $tableId, bool $includeFields=false)
+#### getTable(int $tableId, bool $includeFields=false)
 
 Получить информацию о таблице, включая информацию о полях.
 
