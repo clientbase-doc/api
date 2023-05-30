@@ -13,10 +13,10 @@
     require_once "src/ClientbaseAPI.php";
 
     //Укажите URL вашей "Клиентской Базы"
-    $url = '';//'http://localhost/distr';
+    $url = 'http://localhost/distr';
 
     //Укажите токен, который вы создали для работы с API в настройках "Клиентской Базы"
-    $token = "P8O49OmRKgjh8EVmfCSkvKbBtyFiQpVnj0vDzNolr8xLbgdC";
+    $token = "NqOrqMfcYPdyBaxz5pY8tnDb1pnSUVXe33cex1IAYmV4ofGQ";
     
     //Создаем объект для работы с API
     $cbAPI = new ClientbaseAPI($url, $token);
@@ -35,7 +35,7 @@
     </head>
 <body>
 <div class="container">
-<?
+<?php
 
     $action = $_GET['action'];
 

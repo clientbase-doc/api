@@ -348,7 +348,7 @@ class ClientbaseAPI
      */
     private function _rawToResult($rawResult) 
     {
-        $result = null;
+        $result = [];
 
         if (!empty($rawResult->data)) {
             $result = $rawResult->data;
