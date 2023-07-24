@@ -61,7 +61,7 @@ foreach ($tables as $table) {
 * _getData(int $tableId, int $lineId)_ - получить информацию о записи в таблице
     *_$tableId_ ID таблицы
     *_$lineId_ ID записи в таблице
-* _getFile(int $tableId, int $fieldId, int $lineId, string $fileName)_ - получить информацию файле из поля типа "Файл" в записи
+* _getFile(int $tableId, int $fieldId, int $lineId, string $fileName)_ - получить информацию о файле из поля типа "Файл" в записи
     *_$tableId_ ID таблицы
     *_$fieldId_ ID поля, содержащего файл   
     *_$lineId_ ID записи в таблице

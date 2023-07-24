@@ -283,7 +283,7 @@ class ClientbaseAPI
      * @param $fileName string Название файла
      * @return stdClass
      */
-    public function getFile(int $tableId, int $fieldId, int $lineId, string $fileName) : stdClass
+    public function getFile(int $tableId, int $fieldId, int $lineId, string $fileName = "")
     {
         if ($tableId <= 0) {
             throw new Exception('Incorrect table id:' . $tableId);
@@ -297,7 +297,7 @@ class ClientbaseAPI
             throw new Exception('Incorrect field id: ' . $fieldId);
         }
                 
-        $rawResult = $this->query("/file/" . $tableId . "/" . $fieldId . "/" . $lineId . "/" . $fileName);
+        $rawResult = $this->query("/file/" . $tableId . "/" . $fieldId . "/" . $lineId . "/?filename=" . urlencode($fileName));
         $result = $this->_rawToResult($rawResult);
 
         return $result;
