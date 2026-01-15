@@ -179,7 +179,7 @@ class ClientbaseAPI
                 
         $body = $this->bodyFromData($data);
         $body->data->type = "data" . $tableId;   
-        $rawResult = $this->query("/data" . $tableId . "/" . $lineId, "POST", "", $body);
+        $rawResult = $this->query("/data" . $tableId, "POST", [], $body);
         $result = $this->_rawToResult($rawResult);
 
         return $result;
@@ -206,7 +206,7 @@ class ClientbaseAPI
         $body = $this->bodyFromData($data);
         $body->data->type = "data" . $tableId;
         $body->data->id = $lineId;        
-        $rawResult = $this->query("/data" . $tableId . "/" . $lineId, "PATCH", "", $body);
+        $rawResult = $this->query("/data" . $tableId . "/" . $lineId, "PATCH", [], $body);
         $result = $this->_rawToResult($rawResult);
 
         return $result;
